@@ -6,7 +6,9 @@ from bson import ObjectId
 
 from app.database.connection import database
 from app.models.todo import TodoCreate, TodoUpdate, TodoInDB
-
+from fastapi import Depends
+from app.routers.auth import get_current_user
+from app.models.user import UserPublic
 router = APIRouter(prefix="/todos", tags=["todos"])
 
 
@@ -34,6 +36,7 @@ async def list_todos(collection=Depends(get_todo_collection)):
 async def create_todo(
     todo: TodoCreate,
     collection=Depends(get_todo_collection),
+    current_user: UserPublic = Depends(get_current_user),   # ← add this
 ):
     doc = todo.model_dump()
     result = await collection.insert_one(doc)
@@ -70,6 +73,7 @@ async def update_todo(
     todo_id: str,
     update: TodoUpdate,
     collection=Depends(get_todo_collection),
+    current_user: UserPublic = Depends(get_current_user),   # ← add this
 ):
     if not ObjectId.is_valid(todo_id):
         raise HTTPException(status_code=400, detail="Invalid id format")

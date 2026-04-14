@@ -4,6 +4,9 @@ from fastapi import FastAPI
 
 from app.database.connection import database
 from app.routers import todos
+from app.routers import auth   
+from app.routers import health          # add this import
+app.include_router(health.router)       # add this line
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -25,3 +28,4 @@ app = FastAPI(
 
 # Mount the /todos routes
 app.include_router(todos.router)
+app.include_router(auth.router) 

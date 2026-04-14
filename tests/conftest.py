@@ -31,13 +31,9 @@ async def use_test_database():
 
 
 @pytest_asyncio.fixture(autouse=True)
-async def clear_todos():
-    """
-    Runs before each individual test.
-    Empties the todos collection so every test starts with a clean slate.
-    """
-    await database.db["todos"].delete_many({})
-
+async def clear_users():
+    """Empty the users collection before each test."""
+    await database.db["users"].delete_many({})
 
 @pytest_asyncio.fixture
 async def client():
